@@ -1,3 +1,5 @@
+% hello :)
+
 %%%%%%%%% section for defining functions %%%%%%%%%%
 
 function [u]=calcVelocity(H, w, k, h, z, t)
