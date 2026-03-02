@@ -116,20 +116,12 @@ ylabel('Drag (N)')
 title('Drag force on structure')
 
 % test the inertia force
-C_M = 0.5;
+C_M = 1.05;
 
 iner_series = calcTotalIner(H, w, k, h, t_series, C_M, dz, H_str);
 
-figure(3)
+figure(2)
 plot(t_series, iner_series)
 xlabel('Time (sec)')
-ylabel('Inertia (N)')
-title('Inertia force on structure')
-
-% test total force
-figure(4)
-total_force = drag_series+iner_series;
-plot(t_series, total_force)
-xlabel('Time (sec)')
-ylabel('Total force (N)')
-title('Total force on structure')
+ylabel('Drag (N)')
+title('Drag force on structure')
