@@ -15,7 +15,7 @@ end
 %% Define functions for different shapes
 % width function for a cube
 function [L]=setWidth(z)
-    L = 1; % m
+    L = 1 - 0.3*z; % m
 end
 
 % width of a sliced cone 
@@ -78,6 +78,18 @@ function [F_iner]=calcTotalIner(H, w, k, h, t, C_M, dz, H_str)
     F_iner = sum;
 end
 
+% calculate moment caused by wave forces
+function [M]=calcMoment(H, w, k, h, t, C_D, C_M, dz, H_str)
+    sum = 0;
+    for z = 0:dz:H_str
+        deltaI = calcDeltaInertia(H, w, k, h, z, t, C_M, dz);
+        deltaD = calcDeltaDrag(H, w, k, h, z, t, C_D, dz);
+        dF = (deltaI + deltaD) * z;
+        sum = sum + dF;
+    end
+    M = sum;    
+end
+
 % solve dispersion relation for k
 function [Ksol]=dispersionNR(k0,h,T,eror)
     %       [Ksol]=dispersionNR(k0,h,T,eror);
@@ -121,7 +133,7 @@ h = 2; % meters
 z = -2; % meters
 
 k = dispersionNR(pi, h, T, 0.01);
-w = 2*pi / T
+w = 2*pi / T;
 
 t_series = 0:dt:t_end;
 
@@ -159,3 +171,15 @@ title('Forces on structure')
 
 % add legend
 legend('Drag force', 'Inertia force', 'Total force')
+
+% test moment
+moment_series = calcMoment(H, w, k, h, t_series, C_D, C_M, dz, H_str);
+figure(2)
+plot(t_series, moment_series)
+xlabel('Time (sec)')
+ylabel('Moment (N*m)')
+title('Momemt on structure from wave action')
+
+% print maximum horizontal force experienced by structure
+max_force = max(total_force);
+fprintf('Maximum horizontal force: %f N', max_force)
