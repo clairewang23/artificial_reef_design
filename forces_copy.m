@@ -13,7 +13,7 @@ function [a]=calcAccel(H, w, k, h, z, t)
 end
 
 %% Define functions for different shapes
-% width function for a cube
+% example width function
 function [L]=setWidth(z)
     L = 1 - 0.3*z; % m
 end
@@ -129,8 +129,8 @@ dt = 0.1;
 t_end = 100;
 H = 0.5; % meters
 T = 10;
-h = 2; % meters
-z = -2; % meters
+h = 1.5; % meters
+z = -0.7; % meters
 
 k = dispersionNR(pi, h, T, 0.01);
 w = 2*pi / T;
@@ -140,19 +140,20 @@ t_series = 0:dt:t_end;
 u_series = calcVelocity(H, w, k, h, z, t_series);
 
 % test the x-velocity
-%plot(t_series, u_series), hold on
-%xlabel('Time (sec)')
-%ylabel('x-velocity (m/s)')
-%title('x-velocity at z = -1 m')
+figure(1)
+plot(t_series, u_series), hold on
+xlabel('Time (sec)')
+ylabel('x-velocity (m/s)')
+title('x-velocity at top of structure (z=-0.7m)')
 
 % test the drag force
-C_D = 1.2;
+C_D = 1;
 dz = 0.01; % m
 H_str = 1; 
 
 drag_series = calcTotalDrag(H, w, k, h, t_series, C_D, dz, H_str);
 
-figure(1)
+figure(2)
 plot(t_series, drag_series, 'b'), hold on
 
 % test the inertia force
@@ -174,7 +175,7 @@ legend('Drag force', 'Inertia force', 'Total force')
 
 % test moment
 moment_series = calcMoment(H, w, k, h, t_series, C_D, C_M, dz, H_str);
-figure(2)
+figure(3)
 plot(t_series, moment_series)
 xlabel('Time (sec)')
 ylabel('Moment (N*m)')
